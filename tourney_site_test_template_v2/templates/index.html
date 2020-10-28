@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <style res="stylesheet">
+    .event-details-container {
+      font-family: Lato, Arial, Helvetica, sans-serif;
+    }
+  </style>
+  <title>tourney-site-test-template-v2</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <v-app-bar app color="primary" dark dense v-if="authenticated">
+        <v-toolbar-title>Main nav</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <router-link to="/users"><v-btn text>Users</v-btn></router-link>        
+        <router-link to="/hello"><v-btn text>Hello Component</v-btn></router-link>
+        <v-btn href="/logout" text>Logout</v-btn>
+
+      </v-app-bar>
+      <v-content>
+        <router-view></router-view>
+      </v-content>
+    </v-app>
+  </div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+
+  <script src="/static/js/users.vue.js"></script>
+  <script src="/static/js/hello.vue.js"></script>
+  <script src="/static/js/login.vue.js"></script>
+
+  <script>
+    Vue.use(VueRouter);
+
+    const routes = [
+     {path: '/hello', component: helloComp},
+     {path: '/login', component: loginComp},
+     {path: '/users', component: usersComp},
+    ];
+
+    const router = new VueRouter({
+      mode: "history",
+      routes
+    });
+
+    var app = new Vue({
+      el: '#app',
+      vuetify: new Vuetify({
+        icons: {
+          iconfont: 'mdi',
+        },
+      }),
+      data() {
+        return {
+          authenticated: false,
+        };
+      },
+      mounted() {
+        this.check_auth()
+      },
+      methods: {
+        check_auth(){
+          axios.post("/").then(result => {
+            this.authenticated = result.data.auth;
+            if(!this.authenticated){
+              router.replace('/login')
+            }
+          });
+        },
+      },
+      router
+    });
+
+  </script>
+  </body>
+</html>
