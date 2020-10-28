@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-from ..models import login_required
+from tourney_site.models import login_required
 
 bp = Blueprint('hello', __name__)
 

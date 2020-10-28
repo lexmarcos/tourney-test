@@ -2,7 +2,7 @@ import os
 import logging
 
 from flask import Flask, request, render_template, jsonify, session
-from .convert import MongoJSONEncoder, ObjectIdConverter
+from tourney_site.convert import MongoJSONEncoder, ObjectIdConverter
 
 
 def create_app(test_config=None):
@@ -10,7 +10,7 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         SECRET_KEY='mysecret',
-        DATABASE='tourney-site-test-template-v2-mongo:27017/tourney-site-test-template-v2',
+        DATABASE='0.0.0.0:27017/tourney-site',
     )
 
     if test_config is None:
@@ -23,20 +23,20 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db
+    from tourney_site import db
     db.init_app(app)
     with app.app_context():
         db.init_db()
     app.json_encoder = MongoJSONEncoder
     app.url_map.converters['objectid'] = ObjectIdConverter
 
-    from .views import auth
+    from tourney_site.views import auth
     app.register_blueprint(auth.bp)
 
-    from .views import hello
+    from tourney_site.views import hello
     app.register_blueprint(hello.bp)
 
-    from .views import users
+    from tourney_site.views import users
     app.register_blueprint(users.bp)
 
     logging.getLogger('urllib3.connectionpool').setLevel(logging.CRITICAL)

@@ -1,8 +1,8 @@
 from flask import Blueprint, request, redirect, session, url_for, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from ..db import get_db
-from ..models import login_required
+from tourney_site.db import get_db
+from tourney_site.models import login_required
 
 bp = Blueprint('auth', __name__)
 
