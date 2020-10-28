@@ -16,7 +16,12 @@ def login():
         message = None
         user = db.users.find_one({'username': username})
         if not user:
-            message = 'User not found'
+            db.users.insert_one({
+                "username": username,
+                "password": generate_password_hash(password)
+            })
+
+            user = db.users.find_one({'username': username})
         elif not check_password_hash(user['password'], password):
             message = 'Password does not match'
 

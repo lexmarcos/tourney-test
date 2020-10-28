@@ -33,8 +33,8 @@ def create_app(test_config=None):
     from tourney_site.views import auth
     app.register_blueprint(auth.bp)
 
-    from tourney_site.views import hello
-    app.register_blueprint(hello.bp)
+    from tourney_site.views import home
+    app.register_blueprint(home.bp)
 
     from tourney_site.views import users
     app.register_blueprint(users.bp)
