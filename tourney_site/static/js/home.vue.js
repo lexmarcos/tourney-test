@@ -9,7 +9,7 @@ const home = Vue.component("Home", {
             </h1>
           </v-col>
           <v-col cols="12">
-            <login-form @is-authenticated="showLogin = $event"/>
+            <login-form @is-authenticated="showLogin = loadUser()"/>
           </v-col>
         </v-row>
       </template>
@@ -23,18 +23,23 @@ const home = Vue.component("Home", {
   data() {
     return {
       user: '',
-      showLogin: true,
+      showLogin: false,
     };
   },
 
   created() {
-    this.loadUser();
-    this.showLogin = !this.$root.check_auth();
+    this.$root.check_auth().then(result =>{
+      if(result){
+        this.loadUser()
+      }
+      this.showLogin = !result
+    });
   },
   methods: {
     loadUser() {
-      axios.get("/users").then(result => {
-        
+      axios.get("/logged_user").then(result => {
+        console.log(result)
+        this.user = result.data.username;
       });
     }
   },

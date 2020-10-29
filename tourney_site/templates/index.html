@@ -86,13 +86,13 @@
       },
       methods: {
         check_auth(){
-          axios.post("/").then(result => {
+          return axios.post("/").then(result => {
             this.authenticated = result.data.auth;
             if(!this.authenticated){
               return false
             }
+            return this.authenticated;
           });
-          return this.authenticated;
         },
       },
       router
