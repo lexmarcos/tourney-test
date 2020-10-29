@@ -36,7 +36,6 @@ const loginComp = Vue.component("LoginComp", {
     loginRequest(){
       axios.post("/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
         this.message = result.data.message;
-        console.log(this.message)
         if(this.message == "authenticated"){
           this.$root.check_auth();
           router.replace('/')
