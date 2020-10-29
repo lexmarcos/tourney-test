@@ -37,7 +37,6 @@ def login():
 @bp.route('/logged_user', methods=['GET'])
 @login_required
 def logged_user():
-    print({"username": session['username']})
     return jsonify({"username": session['username']})
 
 
