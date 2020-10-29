@@ -118,7 +118,6 @@ const tournaments = Vue.component("Tournaments", {
         daterange: this.dates,
         description: this.description,
       }
-      console.log(payload)
       axios.post("/tournaments/new", payload).then(result => {
         this.loadTournaments()
       });

@@ -38,7 +38,6 @@ const home = Vue.component("Home", {
   methods: {
     loadUser() {
       axios.get("/logged_user").then(result => {
-        console.log(result)
         this.user = result.data.username;
       });
     }
