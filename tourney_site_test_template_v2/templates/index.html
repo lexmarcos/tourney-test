@@ -11,23 +11,35 @@
       font-family: Lato, Arial, Helvetica, sans-serif;
     }
   </style>
-  <title>tourney-site-test-template-v2</title>
+  <title>Tourney Site</title>
 </head>
 
 <body>
   <div id="app" v-cloak>
     <v-app>
       <v-app-bar app color="primary" dark dense v-if="authenticated">
-        <v-toolbar-title>Main nav</v-toolbar-title>
+        <v-toolbar-title>Tourney Site</v-toolbar-title>
         <v-spacer></v-spacer>
-        <router-link to="/users"><v-btn text>Users</v-btn></router-link>        
-        <router-link to="/hello"><v-btn text>Hello Component</v-btn></router-link>
+        <router-link to="/"><v-btn text>Home</v-btn></router-link>  
+        <router-link to="/players"><v-btn text>Players</v-btn></router-link>        
+        <router-link to="/tournaments"><v-btn text>Tournaments</v-btn></router-link>
         <v-btn href="/logout" text>Logout</v-btn>
 
       </v-app-bar>
       <v-content>
         <router-view></router-view>
       </v-content>
+      <v-footer
+        absolute
+        class="font-weight-medium"
+      >
+        <v-col
+          class="text-center"
+          cols="12"
+        >
+          Copyright <span>&#169;</span> <strong>Deeper Systems</strong>
+        </v-col>
+      </v-footer>
     </v-app>
   </div>
 
@@ -38,17 +50,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
   <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
-  <script src="/static/js/users.vue.js"></script>
-  <script src="/static/js/hello.vue.js"></script>
+  <script src="/static/js/home.vue.js"></script>
+  <script src="/static/js/players.vue.js"></script>
+  <script src="/static/js/tournaments.vue.js"></script>
   <script src="/static/js/login.vue.js"></script>
 
   <script>
     Vue.use(VueRouter);
 
     const routes = [
-     {path: '/hello', component: helloComp},
-     {path: '/login', component: loginComp},
-     {path: '/users', component: usersComp},
+      {path: '/', component: home},
+      {path: '/tournaments', component: tournaments},
+      {path: '/login', component: loginComp},
+      {path: '/players', component: players},
     ];
 
     const router = new VueRouter({

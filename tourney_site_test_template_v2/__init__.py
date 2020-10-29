@@ -10,7 +10,7 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         SECRET_KEY='mysecret',
-        DATABASE='tourney-site-test-template-v2-mongo:27017/tourney-site-test-template-v2',
+        DATABASE='localhost:27017/tourney-site-test-template-v2',
     )
 
     if test_config is None:
