@@ -1,4 +1,4 @@
-# tourney-site-test-template-v2
+# tourney-site
 
 # To Run
 ```shell script
