@@ -42,8 +42,8 @@ const tournaments = Vue.component("Tournaments", {
               />
               <v-dialog
                 ref="dialog"
-                v-model="modal"
-                :return-value.sync="date"
+                v-model="datesModal"
+                :return-value.sync="dates"
                 persistent
                 width="290px"
               >
@@ -113,10 +113,14 @@ const tournaments = Vue.component("Tournaments", {
     },
     submitTournaments() {
       payload = {
-
+        name: this.tournamentName,
+        game: this.game,
+        daterange: this.dates,
+        description: this.description,
       }
-      axios.post("/tournaments", payload).then(result => {
-        
+      console.log(payload)
+      axios.post("/tournaments/new", payload).then(result => {
+        this.loadTournaments()
       });
     }
   },
