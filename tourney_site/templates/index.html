@@ -20,7 +20,6 @@
       <v-app-bar app color="primary" dark dense v-if="authenticated">
         <v-toolbar-title>Main nav</v-toolbar-title>
         <v-spacer></v-spacer>
-        <router-link to="/users"><v-btn text>Users</v-btn></router-link>        
         <router-link to="/hello"><v-btn text>Hello Component</v-btn></router-link>
         <v-btn href="/logout" text>Logout</v-btn>
 
@@ -38,7 +37,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
   <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
-  <script src="/static/js/users.vue.js"></script>
   <script src="/static/js/hello.vue.js"></script>
   <script src="/static/js/login.vue.js"></script>
 
@@ -48,7 +46,6 @@
     const routes = [
      {path: '/hello', component: helloComp},
      {path: '/login', component: loginComp},
-     {path: '/users', component: usersComp},
     ];
 
     const router = new VueRouter({

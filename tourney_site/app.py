@@ -36,9 +36,6 @@ def create_app(test_config=None):
     from tourney_site.views import home
     app.register_blueprint(home.bp)
 
-    from tourney_site.views import users
-    app.register_blueprint(users.bp)
-
     logging.getLogger('urllib3.connectionpool').setLevel(logging.CRITICAL)
 
     @app.after_request
