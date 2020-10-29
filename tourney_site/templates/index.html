@@ -42,9 +42,11 @@
   <script src="/static/js/hello.vue.js"></script>
   <script src="/static/js/login.vue.js"></script>
 
+  <script src="/static/js/components/flash-message.vue.js"></script>
+
   <script>
     Vue.use(VueRouter);
-
+    window.Bus = new Vue();
     const routes = [
      {path: '/hello', component: helloComp},
      {path: '/login', component: loginComp},

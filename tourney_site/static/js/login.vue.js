@@ -1,6 +1,7 @@
 const loginComp = Vue.component("LoginComp", {
   template: /* html */`
   <v-container class="fill-height" fluid>
+    <flash-message />
       <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
@@ -25,6 +26,7 @@ const loginComp = Vue.component("LoginComp", {
     return {
       username: "",
       password: "",
+      snackbar: true,
       message: String,
       error: false,
     };
@@ -34,13 +36,17 @@ const loginComp = Vue.component("LoginComp", {
     loginRequest(){
       axios.post("/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
         this.message = result.data.message;
+        console.log(this.message)
         if(this.message == "authenticated"){
           this.$root.check_auth();
           router.replace('/')
         }else{
-          this.error = true
+          this.sendMessage(result.data.message, 'error');
         }
       });
+    },
+    sendMessage(text, type){
+      Bus.$emit('flash-message', message = {text: text, type: type});
     }
   },
 });
