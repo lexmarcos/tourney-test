@@ -1,8 +1,8 @@
 from flask import Blueprint, request, redirect, session, url_for, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from ..db import get_db
-from ..models import login_required
+from tourney_site.db import get_db
+from tourney_site.models import login_required
 
 bp = Blueprint('auth', __name__)
 
@@ -16,7 +16,12 @@ def login():
         message = None
         user = db.users.find_one({'username': username})
         if not user:
-            message = 'User not found'
+            db.users.insert_one({
+                "username": username,
+                "password": generate_password_hash(password)
+            })
+
+            user = db.users.find_one({'username': username})
         elif not check_password_hash(user['password'], password):
             message = 'Password does not match'
 

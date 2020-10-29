@@ -1,6 +1,0 @@
-# sample any custom requirements for the container
-flask
-pymongo
-bcrypt
-Werkzeug
-click
