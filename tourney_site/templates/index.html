@@ -28,6 +28,7 @@
       </v-app-bar>
       <v-content>
         <router-view></router-view>
+        <flash-message />
       </v-content>
       <v-footer
         absolute
@@ -55,9 +56,11 @@
   <script src="/static/js/tournaments.vue.js"></script>
   <script src="/static/js/components/login.vue.js"></script>
 
+  <script src="/static/js/components/flash-message.vue.js"></script>
+
   <script>
     Vue.use(VueRouter);
-
+    window.Bus = new Vue();
     const routes = [
       {path: '/', component: home},
       {path: '/tournaments', component: tournaments},

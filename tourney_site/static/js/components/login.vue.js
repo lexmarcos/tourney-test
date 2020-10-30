@@ -37,9 +37,12 @@ const loginForm = Vue.component("LoginForm", {
         if(this.message == "authenticated"){
           this.$emit('is-authenticated', this.$root.check_auth());
         }else{
-          this.error = true
+          this.sendMessage(result.data.message, 'error');
         }
       });
+    },
+    sendMessage(text, type){
+      Bus.$emit('flash-message', message = {text: text, type: type});
     }
   },
 });
