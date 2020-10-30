@@ -1,4 +1,4 @@
-const loginComp = Vue.component("LoginComp", {
+const loginForm = Vue.component("LoginForm", {
   template: /* html */`
   <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
@@ -9,7 +9,7 @@ const loginComp = Vue.component("LoginComp", {
                   </v-toolbar>
                   <v-card-text>
                       <v-text-field v-model="username" prepend-icon="mdi-account" label="username" required></v-text-field>
-                      <v-text-field v-model="password" prepend-icon="mdi-lock" label="password" type="password" required></v-text-field>
+                      <v-text-field v-model="password" prepend-icon="mdi-lock" label="password" type="password" required @keyup.enter.native="loginRequest()"></v-text-field>
                       <v-alert type="error" v-show="error">{{ message }}</v-alert>
                   </v-card-text>
                   <v-card-actions>
@@ -25,7 +25,6 @@ const loginComp = Vue.component("LoginComp", {
     return {
       username: "",
       password: "",
-      snackbar: true,
       message: String,
       error: false,
     };
@@ -36,8 +35,7 @@ const loginComp = Vue.component("LoginComp", {
       axios.post("/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
         this.message = result.data.message;
         if(this.message == "authenticated"){
-          this.$root.check_auth();
-          router.replace('/')
+          this.$emit('is-authenticated', this.$root.check_auth());
         }else{
           this.sendMessage(result.data.message, 'error');
         }

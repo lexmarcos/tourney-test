@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Blueprint, jsonify, session, request, flash, redirect, url_for
+from flask import Blueprint, jsonify, session, request, flash, redirect, url_for, flash
 
 from tourney_site.models import login_required
 from tourney_site.db import get_db
@@ -41,11 +41,11 @@ def tournaments_view():
     })
 
 
-@bp.route('/new_tournament')
+@bp.route('/tournaments/new', methods=['POST'])
 @login_required
 def new_tournaments_view():
     db = get_db()
-    user = session["user"]
+    user = session["username"]
 
     name = request.json['name']
     game = request.json['game']
@@ -53,18 +53,21 @@ def new_tournaments_view():
     description = request.json['description']
 
     if not name:
-        raise ValueError('Enter the tournament name.')
+        flash('Enter the tournament name.')
+        return redirect('/tournaments')
 
     if not game:
-        raise ValueError('Enter the tournament game.')
+        flash('Enter the tournament game.')
+        return redirect('/tournaments')
 
     if not daterange:
-        raise ValueError('Enter the tournament daterange.')
+        flash('Enter the tournament daterange.')
+        return redirect('/tournaments')
 
     tourney_id = db.tournaments.insert_one({
         'name': name.strip(),
         'game': game.strip(),
-        'dates': [s.strip() for s in daterange.split(" - ")],
+        'dates': daterange,
         'description': description.strip(),
 
         'creator': user,

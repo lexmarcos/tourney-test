@@ -7,7 +7,7 @@ const flashMessage = Vue.component("FlashMessage", {
         absolute
         right
         :color="message.type"
-        bottom
+        top
         elevation="15"
       >
         {{message.text}}
