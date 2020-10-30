@@ -1,6 +1,5 @@
 const flashMessage = Vue.component("FlashMessage", {
   template: /* html */`
-    <v-container>
       <v-snackbar
         v-if="message"
         :timeout="-1"
@@ -23,8 +22,7 @@ const flashMessage = Vue.component("FlashMessage", {
           </v-icon>
         </v-btn>
       </template>
-      </v-snackbar>
-    </v-container>`,
+      </v-snackbar>`,
 
   data(){
     return{

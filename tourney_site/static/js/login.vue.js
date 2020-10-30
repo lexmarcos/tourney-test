@@ -1,7 +1,6 @@
 const loginComp = Vue.component("LoginComp", {
   template: /* html */`
   <v-container class="fill-height" fluid>
-    <flash-message />
       <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
