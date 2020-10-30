@@ -34,6 +34,12 @@ def login():
     return redirect(url_for('index'))
 
 
+@bp.route('/logged_user', methods=['GET'])
+@login_required
+def logged_user():
+    return jsonify({"username": session['username']})
+
+
 @bp.route('/logout')
 @login_required
 def logout():

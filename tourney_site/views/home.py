@@ -41,11 +41,11 @@ def tournaments_view():
     })
 
 
-@bp.route('/tournaments/new')
+@bp.route('/tournaments/new', methods=['POST'])
 @login_required
 def new_tournaments_view():
     db = get_db()
-    user = session["user"]
+    user = session["username"]
 
     name = request.json['name']
     game = request.json['game']
@@ -67,7 +67,7 @@ def new_tournaments_view():
     tourney_id = db.tournaments.insert_one({
         'name': name.strip(),
         'game': game.strip(),
-        'dates': [s.strip() for s in daterange.split(" - ")],
+        'dates': daterange,
         'description': description.strip(),
 
         'creator': user,
