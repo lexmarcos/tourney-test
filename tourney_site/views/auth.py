@@ -7,7 +7,7 @@ from tourney_site.models import login_required
 bp = Blueprint('auth', __name__)
 
 
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('/v/login', methods=['GET', 'POST'])
 def login():
     db = get_db()
     if request.method == 'POST':
@@ -34,7 +34,7 @@ def login():
     return redirect(url_for('index'))
 
 
-@bp.route('/logged_user', methods=['GET'])
+@bp.route('/v/logged_user', methods=['GET'])
 @login_required
 def logged_user():
     return jsonify({"username": session['username']})

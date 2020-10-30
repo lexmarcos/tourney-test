@@ -6,7 +6,7 @@ from tourney_site.convert import MongoJSONEncoder, ObjectIdConverter
 
 
 def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_folder="./static", template_folder="./templates")
 
     app.config.from_mapping(
         SECRET_KEY='mysecret',
@@ -46,8 +46,9 @@ def create_app(test_config=None):
         r.headers['Cache-Control'] = 'public, max-age=0'
         return r
 
-    @app.route('/', methods=['GET', 'POST'])
-    def index():
+    @app.route('/', defaults={'path': ''}, methods=["GET", "POST"])
+    @app.route('/<path:path>')
+    def index(path):
         if request.method == "POST":
             if "username" in session:
                 return jsonify({"auth": True})
