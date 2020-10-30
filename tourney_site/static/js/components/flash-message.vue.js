@@ -6,6 +6,7 @@ const flashMessage = Vue.component("FlashMessage", {
         :value="true"
         absolute
         right
+        class="flask-message"
         :color="message.type"
         top
         elevation="15"

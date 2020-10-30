@@ -14,7 +14,7 @@ def home_view():
     return jsonify({"message": "Hello"})
 
 
-@bp.route('/players')
+@bp.route('/api/players')
 @login_required
 def players_view():
     db = get_db()
@@ -28,7 +28,7 @@ def players_view():
     })
 
 
-@bp.route('/tournaments')
+@bp.route('/api/tournaments')
 @login_required
 def tournaments_view():
     db = get_db()
@@ -41,7 +41,7 @@ def tournaments_view():
     })
 
 
-@bp.route('/tournaments/new', methods=['POST'])
+@bp.route('/api/tournaments/new', methods=['POST'])
 @login_required
 def new_tournaments_view():
     db = get_db()
@@ -54,15 +54,15 @@ def new_tournaments_view():
 
     if not name:
         flash('Enter the tournament name.')
-        return redirect('/tournaments')
+        return redirect('/api/tournaments')
 
     if not game:
         flash('Enter the tournament game.')
-        return redirect('/tournaments')
+        return redirect('/api/tournaments')
 
     if not daterange:
         flash('Enter the tournament daterange.')
-        return redirect('/tournaments')
+        return redirect('/api/tournaments')
 
     tourney_id = db.tournaments.insert_one({
         'name': name.strip(),
@@ -83,4 +83,4 @@ def new_tournaments_view():
         'created_ts': datetime.datetime.now(),
     })
 
-    return redirect('/tournaments')
+    return redirect('/api/tournaments')
