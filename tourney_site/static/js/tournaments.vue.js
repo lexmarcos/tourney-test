@@ -23,19 +23,10 @@ const tournaments = Vue.component("Tournaments", {
           </v-card>
         </v-col>
         <v-col cols="12" sm="10" md="7" class="d-flex justify-end">
-          <v-dialog
-            v-model="dialog"
-            persistent
-            max-width="500"
-          >
+          <v-dialog v-model="dialog" persistent max-width="500">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-              >
-              Create Tournament
+              <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                Create Tournament
               </v-btn>
             </template>
             <v-card>
@@ -43,21 +34,9 @@ const tournaments = Vue.component("Tournaments", {
                 New Tournament
               </v-card-title>
               <v-card-text>
-                <v-text-field
-                  label="Tournament Name"
-                  v-model="tournamentName"
-                />
-                <v-text-field
-                  label="Game"
-                  v-model="game"
-                />
-                <v-dialog
-                  ref="dialog"
-                  v-model="datesModal"
-                  :return-value.sync="dates"
-                  persistent
-                  width="290px"
-                >
+                <v-text-field label="Tournament Name" v-model="tournamentName"/>
+                <v-text-field label="Game" v-model="game"/>
+                <v-dialog ref="dialog" v-model="datesModal" :return-value.sync="dates" persistent width="300px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="dates"
@@ -65,48 +44,26 @@ const tournaments = Vue.component("Tournaments", {
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                    ></v-text-field>
+                    />
                   </template>
-                  <v-date-picker
-                    v-model="dates"
-                    range
-                  >
+                  <v-date-picker v-model="dates" range>
                     <v-spacer></v-spacer>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="datesModal = false"
-                    >
+                    <v-btn text color="primary" @click="datesModal = false">
                       Cancel
                     </v-btn>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog.save(dates)"
-                    >
+                    <v-btn text color="primary" @click="$refs.dialog.save(dates)">
                       OK
                     </v-btn>
                   </v-date-picker>
                 </v-dialog>
-                <v-textarea
-                  label="Description"
-                  v-model="description"
-                />
+                <v-textarea label="Description" v-model="description"/>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="grey darken-1"
-                  text
-                  @click="dialog = false"
-                >
+                <v-btn color="grey darken-1" text @click="dialog = false">
                   Cancel
                 </v-btn>
-                <v-btn
-                  dark
-                  color="success"
-                  @click="submitTournament()"
-                >
+                <v-btn dark color="success" @click="submitTournament()">
                   Submit
                 </v-btn>
               </v-card-actions>
