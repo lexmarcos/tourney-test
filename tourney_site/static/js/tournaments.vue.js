@@ -106,10 +106,12 @@ const tournaments = Vue.component("Tournaments", {
       }
       axios.post("/api/tournaments/new", payload).then(result => {
         this.loadTournaments()
-        if(!result.data.sucess){
-          this.$root.sendFlash(result.data.messages, 'error');
+        console.log(result.data)
+        if(!result.data.success){
+          return this.$root.sendFlash(result.data.messages, 'error');
         }
         this.dialog = false;
+        return this.$root.sendFlash(result.data.messages, 'success');
       })
     }
   },

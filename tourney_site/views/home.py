@@ -7,13 +7,6 @@ from tourney_site.db import get_db
 
 bp = Blueprint('home', __name__)
 
-
-@bp.route('/home')
-@login_required
-def home_view():
-    return jsonify({"message": "Hello"})
-
-
 @bp.route('/api/players')
 @login_required
 def players_view():
@@ -52,17 +45,15 @@ def new_tournaments_view():
     daterange = request.json['daterange']
     description = request.json['description']
 
+
     if not name:
-        flash('Enter the tournament name.')
-        return redirect('/api/tournaments')
+        return jsonify({"success": False, "messages": "Enter the tournament name."})
 
     if not game:
-        flash('Enter the tournament game.')
-        return redirect('/api/tournaments')
+        return jsonify({"success": False, "messages": "Enter the tournament game."})
 
     if not daterange:
-        flash('Enter the tournament daterange.')
-        return redirect('/api/tournaments')
+        return jsonify({"success": False, "messages": "Enter the tournament daterange."})
 
     tourney_id = db.tournaments.insert_one({
         'name': name.strip(),
@@ -83,4 +74,4 @@ def new_tournaments_view():
         'created_ts': datetime.datetime.now(),
     })
 
-    return redirect('/api/tournaments')
+    return jsonify({"success": True, "messages": "Tournament created"})
