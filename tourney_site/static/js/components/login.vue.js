@@ -32,7 +32,7 @@ const loginForm = Vue.component("LoginForm", {
 
   methods: {
     loginRequest(){
-      axios.post("/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
+      axios.post("/v/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
         this.message = result.data.message;
         if(this.message == "authenticated"){
           this.$emit('is-authenticated', this.$root.check_auth());

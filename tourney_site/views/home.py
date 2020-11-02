@@ -14,7 +14,7 @@ def home_view():
     return jsonify({"message": "Hello"})
 
 
-@bp.route('/players')
+@bp.route('/v/players')
 @login_required
 def players_view():
     db = get_db()
@@ -28,7 +28,7 @@ def players_view():
     })
 
 
-@bp.route('/tournaments')
+@bp.route('/v/tournaments')
 @login_required
 def tournaments_view():
     db = get_db()
@@ -41,7 +41,7 @@ def tournaments_view():
     })
 
 
-@bp.route('/tournaments/new', methods=['POST'])
+@bp.route('/v/tournaments/new', methods=['POST'])
 @login_required
 def new_tournaments_view():
     db = get_db()
