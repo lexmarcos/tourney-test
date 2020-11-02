@@ -84,7 +84,7 @@
           return axios.post("/").then(result => {
             this.authenticated = result.data.auth;
             if(!this.authenticated){
-              return this.sendFlash("This user does not exist in the session", "error")
+              return false
             }
             return this.authenticated;
           });
