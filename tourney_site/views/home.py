@@ -7,14 +7,7 @@ from tourney_site.db import get_db
 
 bp = Blueprint('home', __name__)
 
-
-@bp.route('/home')
-@login_required
-def home_view():
-    return jsonify({"message": "Hello"})
-
-
-@bp.route('/v/players')
+@bp.route('/api/players')
 @login_required
 def players_view():
     db = get_db()
@@ -28,7 +21,7 @@ def players_view():
     })
 
 
-@bp.route('/v/tournaments')
+@bp.route('/api/tournaments')
 @login_required
 def tournaments_view():
     db = get_db()
@@ -41,7 +34,7 @@ def tournaments_view():
     })
 
 
-@bp.route('/v/tournaments/new', methods=['POST'])
+@bp.route('/api/tournaments/new', methods=['POST'])
 @login_required
 def new_tournaments_view():
     db = get_db()
@@ -51,6 +44,7 @@ def new_tournaments_view():
     game = request.json['game']
     daterange = request.json['daterange']
     description = request.json['description']
+
 
     if not name:
         return jsonify({

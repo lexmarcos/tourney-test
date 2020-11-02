@@ -7,13 +7,14 @@ from tourney_site.models import login_required
 bp = Blueprint('auth', __name__)
 
 
-@bp.route('/v/login', methods=['GET', 'POST'])
+@bp.route('/api/login', methods=['GET', 'POST'])
 def login():
     db = get_db()
     if request.method == 'POST':
         username = request.json["body"]['username']
         password = request.json["body"]['password']
         message = None
+        success = False
         user = db.users.find_one({'username': username})
         if not user:
             db.users.insert_one({
@@ -29,12 +30,13 @@ def login():
             session.clear()
             session['username'] = user['username']
             message = 'authenticated'
-        
-        return jsonify({"message": message})
+            success = True
+
+        return jsonify({"success": success, "message": message})
     return redirect(url_for('index'))
 
 
-@bp.route('/v/logged_user', methods=['GET'])
+@bp.route('/api/logged_user', methods=['GET'])
 @login_required
 def logged_user():
     return jsonify({"username": session['username']})

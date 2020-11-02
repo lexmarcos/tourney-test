@@ -63,7 +63,7 @@ const tournaments = Vue.component("Tournaments", {
                 <v-btn color="grey darken-1" text @click="dialog = false">
                   Cancel
                 </v-btn>
-                <v-btn dark color="success" @click="submitTournament()">
+                <v-btn dark color="success" @click="submitTournament">
                   Submit
                 </v-btn>
               </v-card-actions>
@@ -91,8 +91,10 @@ const tournaments = Vue.component("Tournaments", {
 
   methods: {
     loadTournaments() {
-      axios.get("/v/tournaments").then(result => {
+      axios.get("/api/tournaments").then(result => {
         this.tournaments = result.data.tournaments;
+      }).catch((error) => {
+        return Bus.$emit('flash-message', message = {text: error.message, type: 'error'});
       });
     },
     submitTournament() {
@@ -102,10 +104,15 @@ const tournaments = Vue.component("Tournaments", {
         daterange: this.dates,
         description: this.description,
       }
-      axios.post("/v/tournaments/new", payload).then(result => {
+      axios.post("/api/tournaments/new", payload).then(result => {
         this.loadTournaments()
+        console.log(result.data)
+        if(!result.data.success){
+          return this.$root.sendFlash(result.data.message, result.data.success);
+        }
         this.dialog = false;
-      });
+        return this.$root.sendFlash(result.data.message, result.data.success);
+      })
     }
   },
 });

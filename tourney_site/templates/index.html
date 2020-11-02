@@ -6,6 +6,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/main.css">
   <style res="stylesheet">
     .event-details-container {
       font-family: Lato, Arial, Helvetica, sans-serif;
@@ -22,7 +23,7 @@
         <flash-message />
       </v-content>
       <v-footer
-        absolute
+        padless
         class="font-weight-medium"
       >
         <v-col
@@ -88,6 +89,9 @@
             return this.authenticated;
           });
         },
+        sendFlash(text, success){
+          Bus.$emit('flash-message', message = {text: text, success: success});
+        }
       },
       router
     });

@@ -39,8 +39,8 @@ const players = Vue.component("Players", {
   
     methods: {
       loadPlayers() {
-        axios.get("/v/players").then(result => {
-            this.players = result.data.players;
+        axios.get("/api/players").then(result => {
+          this.players = result.data.players;
         });
       },
     },
