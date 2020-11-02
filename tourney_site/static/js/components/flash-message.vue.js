@@ -7,7 +7,7 @@ const flashMessage = Vue.component("FlashMessage", {
         absolute
         right
         class="flask-message"
-        :color="color"
+        :color="message.success ? 'green' : 'red'"
         top
         elevation="15"
       >
@@ -40,14 +40,6 @@ const flashMessage = Vue.component("FlashMessage", {
         this.message = null;
       }, 5000);
     });
-  },
-  computed:{
-    color(){
-      if(message.success){
-        return "green"
-      }
-      return "red"
-    }
   },
   methods: {
     closeSnackbar(){
