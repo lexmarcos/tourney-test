@@ -14,7 +14,7 @@ def login():
         username = request.json["body"]['username']
         password = request.json["body"]['password']
         message = None
-        sucess = False
+        success = False
         user = db.users.find_one({'username': username})
         if not user:
             db.users.insert_one({
@@ -30,9 +30,9 @@ def login():
             session.clear()
             session['username'] = user['username']
             message = 'authenticated'
-            sucess = True
+            success = True
 
-        return jsonify({"success": sucess, "messages": message})
+        return jsonify({"success": success, "message": message})
     return redirect(url_for('index'))
 
 

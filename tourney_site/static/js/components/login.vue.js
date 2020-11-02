@@ -25,7 +25,6 @@ const loginForm = Vue.component("LoginForm", {
     return {
       username: "",
       password: "",
-      message: String,
       error: false,
     };
   },
@@ -33,11 +32,10 @@ const loginForm = Vue.component("LoginForm", {
   methods: {
     loginRequest(){
       axios.post("/api/login", {body: {'username': this.username, 'password': this.password}}).then(result => {
-        this.message = result.data.message;
-        if(this.message == "authenticated"){
+        if(result.data.message == "authenticated"){
           this.$emit('is-authenticated', this.$root.check_auth());
         }else{
-          this.$root.sendFlash(result.data.messages, 'error');
+          this.$root.sendFlash(result.data.message, result.data.success);
         }
       });
     },

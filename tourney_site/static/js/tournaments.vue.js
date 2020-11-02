@@ -108,10 +108,10 @@ const tournaments = Vue.component("Tournaments", {
         this.loadTournaments()
         console.log(result.data)
         if(!result.data.success){
-          return this.$root.sendFlash(result.data.messages, 'error');
+          return this.$root.sendFlash(result.data.message, result.data.success);
         }
         this.dialog = false;
-        return this.$root.sendFlash(result.data.messages, 'success');
+        return this.$root.sendFlash(result.data.message, result.data.success);
       })
     }
   },
