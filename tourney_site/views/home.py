@@ -65,7 +65,6 @@ def new_tournaments_view():
         })
 
     if not daterange:
-        flash('')
         return jsonify({
             "success": False,
             "message": "Enter the tournament daterange"
@@ -90,4 +89,7 @@ def new_tournaments_view():
         'created_ts': datetime.datetime.now(),
     })
 
-    return redirect('/tournaments')
+    return jsonify({
+            "success": True,
+            "message": "Tournament created"
+        })
