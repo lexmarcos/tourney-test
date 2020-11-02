@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Blueprint, jsonify, session, request, flash, redirect, url_for, flash
+from flask import Blueprint, jsonify, session, request, flash, redirect, url_for
 
 from tourney_site.models import login_required
 from tourney_site.db import get_db
@@ -53,16 +53,22 @@ def new_tournaments_view():
     description = request.json['description']
 
     if not name:
-        flash('Enter the tournament name.')
-        return redirect('/tournaments')
+        return jsonify({
+            "success": False,
+            "message": "Enter the tournament name"
+        })
 
     if not game:
-        flash('Enter the tournament game.')
-        return redirect('/tournaments')
+        return jsonify({
+            "success": False,
+            "message": "Enter the tournament game"
+        })
 
     if not daterange:
-        flash('Enter the tournament daterange.')
-        return redirect('/tournaments')
+        return jsonify({
+            "success": False,
+            "message": "Enter the tournament daterange"
+        })
 
     tourney_id = db.tournaments.insert_one({
         'name': name.strip(),
@@ -83,4 +89,7 @@ def new_tournaments_view():
         'created_ts': datetime.datetime.now(),
     })
 
-    return redirect('/tournaments')
+    return jsonify({
+            "success": True,
+            "message": "Tournament created"
+        })
