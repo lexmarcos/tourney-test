@@ -10,7 +10,6 @@ const loginForm = Vue.component("LoginForm", {
                   <v-card-text>
                       <v-text-field v-model="username" prepend-icon="mdi-account" label="username" required></v-text-field>
                       <v-text-field v-model="password" prepend-icon="mdi-lock" label="password" type="password" required @keyup.enter.native="loginRequest()"></v-text-field>
-                      <v-alert type="error" v-show="error">{{ message }}</v-alert>
                   </v-card-text>
                   <v-card-actions>
                       <v-spacer></v-spacer>

@@ -15,7 +15,9 @@ const tournaments = Vue.component("Tournaments", {
                   :key="i"
                 >
                   <v-list-item-content>
-                    <v-list-item-title v-text="tournament.name"></v-list-item-title>
+                    <router-link :to="'/tournament/' + tournament._id">
+                      <v-list-item-title v-text="tournament.name"></v-list-item-title>
+                    </router-link>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>

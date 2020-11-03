@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, session, request, flash, redirect, url_for
 
 from tourney_site.models import login_required
 from tourney_site.db import get_db
+from bson.objectid import ObjectId
 
 bp = Blueprint('home', __name__)
 
@@ -33,6 +34,16 @@ def tournaments_view():
         'tournaments': tournaments,
     })
 
+@bp.route('/api/tournament/<id>')
+@login_required
+def tournament_view(id):
+    db = get_db()
+
+    tournament = list(db.tournaments.find({"_id" : ObjectId(id)}))
+
+    return jsonify({
+        'tournament': tournament[0],
+    })
 
 @bp.route('/api/tournaments/new', methods=['POST'])
 @login_required
