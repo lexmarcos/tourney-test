@@ -156,7 +156,6 @@ const tournamentDetails = Vue.component("TournamentDetails", {
       return false
     },
     isFinished(){
-      console.log(this.tournament.hasOwnProperty('winner'))
       return this.tournament.hasOwnProperty('winner')
     },
     hasPlayer(){

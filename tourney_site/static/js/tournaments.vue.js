@@ -130,11 +130,11 @@ const tournaments = Vue.component("Tournaments", {
         description: this.description,
       }
       axios.post("/api/tournaments/new", payload).then(result => {
-        this.loadTournaments()
         if(!result.data.success){
           return this.$root.sendFlash(result.data.message, result.data.success);
         }
         this.dialog = false;
+        this.loadTournaments();
         return this.$root.sendFlash(result.data.message, result.data.success);
       })
     }

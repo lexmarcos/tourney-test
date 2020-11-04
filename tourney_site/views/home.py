@@ -105,7 +105,7 @@ def tournaments_view():
     db = get_db()
     user = get_current_user()
 
-    tournaments = list(db.tournaments.find({"creator" : { "$ne": 20 }}))
+    tournaments = list(db.tournaments.find({"creator" : { "$ne": user }}))
 
     return jsonify({
         'tournaments': tournaments,
@@ -154,7 +154,6 @@ def player_win():
     db = get_db()
 
     id = request.json['id']
-    print(id)
     round = request.json['round']
     game = request.json['game']
     player = request.json['player']
