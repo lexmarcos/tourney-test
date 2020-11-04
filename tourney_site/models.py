@@ -5,7 +5,7 @@ from functools import wraps
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if 'username' in session:
+        if 'username' in session or 'profile' in dict(session):
             return f(*args, **kwargs)
         else:
             return redirect(url_for('index'))

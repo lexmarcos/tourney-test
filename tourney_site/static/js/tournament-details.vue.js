@@ -1,17 +1,23 @@
-
 const tournamentDetails = Vue.component("TournamentDetails", {
-  template: /* html */`
+  template: /* html */ `
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="10" md="8" lg="6">
-          <v-card class="py-10 px-3 rounded-xl">
-            <v-card-title class="d-block">
-              <div><h1 class="mb-1">{{tournament.name}}</h1></div>
-              <div><span class="text-overline black--text"><v-icon color="black" class="mr-1">mdi-calendar</v-icon>{{tournament.dates[0]}} - {{tournament.dates[1]}}</span></div>
+          <v-card class="py-10 px-3 rounded-xl" v-if="tournament">
+          <bracket-dialog :bracket="tournament.brackets" :show-bracket="showBracket" @close-bracket="showBracket = false"></bracket-dialog>
+            <v-card-title class="d-flex">
+              <div>
+                <div><h1 class="mb-1">{{tournament.name}}</h1></div>
+                <div><span class="text-overline black--text"><v-icon color="black" class="mr-1">mdi-calendar</v-icon>{{tournament.dates[0]}} - {{tournament.dates[1]}}</span></div>
+              </div>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" v-if="user !== tournament.creator && checkIfPlayerIsSignedUp" @click="signUpToTournament">Sign Up</v-btn>
             </v-card-title>
             <v-card-text>
               <div class="mb-1"><h2>Info <v-icon>mdi-information-outline</v-icon></h2></div>
               <v-divider class="mb-4"></v-divider>
+              <v-btn color="primary" class="my-4" v-if="user === tournament.creator && checkIfPlayerIsSignedUp && !tournament.brackets" @click="placePlayers" :loading="loadingCreateBracket">Place Players</v-btn>
+              <v-btn color="deep-purple darken-1" dark v-else-if="tournament.brackets" @click="showBracket = true">Show Bracket</v-btn>
               <info-tournament title="Creator" :info="tournament.creator"/>
               <info-tournament title="Game" :info="tournament.game"/>
               <info-tournament title="Type" :info="tournament.type"/>
@@ -103,21 +109,58 @@ const tournamentDetails = Vue.component("TournamentDetails", {
   data() {
     return {
       tournament: null,
+      user: null,
+      showBracket: false,
+      loadingCreateBracket: false,
     };
   },
 
   created() {
     this.loadTournament();
+    this.loadUser();
   },
-
+  computed: {
+    checkIfPlayerIsSignedUp() {
+      return !this.tournament.players_joined.includes(this.user);
+    },
+  },
   methods: {
     loadTournament() {
       id = this.$route.params.id;
-      axios.get("/api/tournament/"+id).then(result => {
-        this.tournament = result.data.tournament
-        console.log(this.tournament)
-      }).catch((error) => {
-        return Bus.$emit('flash-message', message = {text: error.message, type: 'error'});
+      axios
+        .get("/api/tournament/" + id)
+        .then((result) => {
+          this.tournament = result.data.tournament;
+        })
+        .catch((error) => {
+          return Bus.$emit(
+            "flash-message",
+            (message = { text: error.message, type: "error" })
+          );
+        });
+    },
+    signUpToTournament() {
+      payload = {
+        id: this.$route.params.id,
+      };
+      axios.post("/api/tournament/signup", payload).then((result) => {
+        this.loadTournament();
+      });
+    },
+    loadUser() {
+      axios.get("/api/logged_user").then((result) => {
+        this.user = result.data.username;
+      });
+    },
+    placePlayers() {
+      this.loadingCreateBracket = true;
+      payload = {
+        id: this.$route.params.id,
+      };
+      axios.post("/api/tournament/start", payload).then((result) => {
+        this.loadTournament();
+        loadingCreateBracket = false;
+        this.showBracket = true;
       });
     },
   },

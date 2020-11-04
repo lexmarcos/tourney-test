@@ -22,7 +22,7 @@
         <v-toolbar-title>Tourney Site</v-toolbar-title>
         <v-spacer></v-spacer>
         <template v-if="!authenticated">
-          <router-link to="/"><v-btn text>Login</v-btn></router-link> 
+          <v-btn text href="/login">Login</v-btn>
         </template>
         <template v-else>
           <router-link to="/profile" v-if="username"><v-btn text>[[  username ]]</v-btn></router-link>
@@ -62,6 +62,8 @@
   <script src="/static/js/tournament-details.vue.js"></script>
 
   <script src="/static/js/components/info-tournament.vue.js"></script>
+  <script src="/static/js/components/brackets-dialog.vue.js"></script>
+  <script src="/static/js/components/game-match.vue.js"></script>
   <script src="/static/js/components/flash-message.vue.js"></script>
 
   <script>
@@ -111,8 +113,10 @@
           Bus.$emit('flash-message', message = {text: text, success: success});
         },
         loadUser() {
-          axios.get("/api/logged_user").then(result => {
+          return axios.get("/api/logged_user").then(result => {
             this.username = result.data.username;
+            console.log("bru")
+            return result
           });
         }
       },

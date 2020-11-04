@@ -35,6 +35,7 @@ const home = Vue.component("Home", {
 
   created() {
     this.$root.check_auth().then(result =>{
+      console.log(result)
       if(result){
         this.loadUser()
       }

@@ -9,6 +9,20 @@ const tournaments = Vue.component("Tournaments", {
               <h1>Tournaments</h1>
             </v-card-title>
             <v-card-text class="px-4">
+              <h1 class="mb-3 font-weight-medium">Your Tournaments</h1>
+              <v-list flat>
+                <v-list-item
+                  v-for="(tournament, i) in yourTournaments"
+                  :key="i"
+                >
+                  <v-list-item-content>
+                    <router-link :to="'/tournament/' + tournament._id">
+                      <v-list-item-title v-text="tournament.name"></v-list-item-title>
+                    </router-link>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+              <h1 class="mt-8 mb-3 font-weight-medium">Other tournaments</h1>
               <v-list flat>
                 <v-list-item
                   v-for="(tournament, i) in tournaments"
@@ -82,6 +96,7 @@ const tournaments = Vue.component("Tournaments", {
       dates: null,
       dialog: false,
       description: "",
+      yourTournaments: [],
       tournaments: [],
       datesModal: false,
     };
@@ -89,12 +104,21 @@ const tournaments = Vue.component("Tournaments", {
 
   created() {
     this.loadTournaments();
+    this.loadYourTournaments();
   },
 
   methods: {
     loadTournaments() {
       axios.get("/api/tournaments").then(result => {
         this.tournaments = result.data.tournaments;
+      }).catch((error) => {
+        return Bus.$emit('flash-message', message = {text: error.message, type: 'error'});
+      });
+    },
+    loadYourTournaments() {
+      axios.get("/api/tournaments/user").then(result => {
+        console.log(result)
+        this.yourTournaments = result.data.tournaments;
       }).catch((error) => {
         return Bus.$emit('flash-message', message = {text: error.message, type: 'error'});
       });
