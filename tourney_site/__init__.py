@@ -18,7 +18,7 @@ def create_app(test_config=None):
         authorize_url='https://accounts.google.com/o/oauth2/auth',
         authorize_params=None,
         api_base_url='https://www.googleapis.com/oauth2/v1/',
-        userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
+        userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
         client_kwargs={'scope': 'openid email profile'},
     )
 
@@ -75,22 +75,20 @@ def create_app(test_config=None):
     
     @app.route('/login')
     def login_google():
-        google = oauth.create_client('google')  # create the google oauth client
+        google = oauth.create_client('google')
         redirect_uri = url_for('authorize', _external=True)
         return google.authorize_redirect(redirect_uri)
 
 
     @app.route('/authorize')
     def authorize():
-        google = oauth.create_client('google')  # create the google oauth client
-        token = google.authorize_access_token()  # Access token from google (needed to get user info)
-        resp = google.get('userinfo')  # userinfo contains stuff u specificed in the scrope
+        google = oauth.create_client('google')
+        token = google.authorize_access_token()
+        resp = google.get('userinfo')
         user_info = resp.json()
-        user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
-        # Here you use the profile/user data that you got and query your database find/register the user
-        # and set ur own data in the session not the profile from google
+        user = oauth.google.userinfo()
         session['profile'] = user_info
-        session.permanent = True  # make the session permanant so it keeps existing after broweser gets closed
+        session.permanent = True
         return redirect('/')
 
     return app
