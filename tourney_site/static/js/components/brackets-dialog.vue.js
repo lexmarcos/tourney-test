@@ -23,21 +23,24 @@ const bracketDialog = Vue.component("BracketDialog", {
           </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <div class="d-flex justify-center align-start ml-10 mt-5">
-          <div v-for="(round, round_index) in bracket" :key="round_index">
-            <game-match v-for="(match, index) in round" :match="match" :round="round_index" :key="'m'+round_index + index"></game-match>
+        <div class="bracket" v-if="bracket">
+          <div v-for="(round, round_index) in bracket" :key="round_index" class="round">
+            <game-match v-for="(match, index) in round" :match="match" :round="round_index" :game="index" :show-win-button="isTournamentStarted && isOwnerOfTournament" :key="'m'+round_index + index" @update-tournament="updateTournament"></game-match>
           </div>
         </div>
       </v-card>
     </v-dialog>`,
 
-  props: ['bracket', 'showBracket'],
+  props: ['bracket', 'showBracket', 'isOwnerOfTournament', "isTournamentStarted"],
   created(){
-    console.log(this.bracket)
+    console.log("Test ", this.isTournamentStarted)
   },
   methods:{
     closeBracket(){
       this.$emit("close-bracket")
+    },
+    updateTournament(){
+      this.$emit("update-tournament")
     },
   }
 });

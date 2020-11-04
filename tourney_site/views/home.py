@@ -30,7 +30,6 @@ def get_tournament_config(players):
 
 
 def generate_first_round(players):
-    random.shuffle(players)
     round = []
     config = get_tournament_config(players)
     if config['byes'] > 0:
@@ -149,15 +148,44 @@ def signup_player_to_tournament():
     })
 
 
-@bp.route('/api/tournament/start', methods=['POST'])
+@bp.route('/api/tournament/player/win', methods=['POST'])
 @login_required
-def start_tournament():
+def player_win():
+    db = get_db()
+
+    id = request.json['id']
+    round = request.json['round']
+    game = request.json['game']
+    player = request.json['player']
+
+    bracket = list(db.tournaments.find({"_id" : ObjectId(id)}, {"_id": 0, "brackets": 1}))[0]['brackets']
+
+    bracket[round][game][player]['score'] = 1
+    bracket[round][game][player]['winner'] = True
+    if player == 'player_1':
+        bracket[round][game]['player_2']['winner'] = False
+    else:
+        bracket[round][game]['player_1']['winner'] = False
+    
+    if round + 1 < int(len(bracket)):
+        bracket[round + 1] = make_next_round(bracket[round], round)
+
+    db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "brackets": bracket }} )
+
+    return jsonify({"rounds": bracket})
+
+
+
+
+@bp.route('/api/tournament/place_players', methods=['POST'])
+@login_required
+def place_players():
     db = get_db()
     id = request.json['id']
 
     players = list(db.tournaments.find({"_id" : ObjectId(id)}, {"_id": 0, "players_joined": 1}))
     players = players[0]['players_joined']
-
+    random.shuffle(players)
     config = get_tournament_config(players)
     rounds = []
     rounds.append(generate_first_round(players))
@@ -171,6 +199,16 @@ def start_tournament():
         'brackets': rounds,
     })
 
+@bp.route('/api/tournament/start', methods=['POST'])
+@login_required
+def start_tournament():
+    db = get_db()
+    id = request.json['id']
+    db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "started": True }} )
+    return jsonify({
+            "success": True,
+            "message": "Tournament started"
+        })
 
 
 @bp.route('/api/tournaments/new', methods=['POST'])
