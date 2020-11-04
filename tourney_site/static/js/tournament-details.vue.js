@@ -4,13 +4,30 @@ const tournamentDetails = Vue.component("TournamentDetails", {
       <v-row justify="center">
         <v-col cols="12" sm="10" md="8">
           <v-card class="py-10 px-3 rounded-xl" v-if="tournament">
-          <bracket-dialog :bracket="tournament.brackets" :show-bracket="showBracket" @close-bracket="showBracket = false" :is-owner-of-tournament="isOwnerOfTournament" :is-tournament-started="isTournamentStarted" @update-tournament="loadTournament"></bracket-dialog>
+          <bracket-dialog
+            :bracket="tournament.brackets"
+            :show-bracket="showBracket"
+            :is-owner-of-tournament="isOwnerOfTournament"
+            :is-tournament-started="isTournamentStarted"
+            :winner="tournament.winner"
+            :round-to-finish="tournament.round_to_finish"
+            @update-tournament="loadTournament"
+            @close-bracket="showBracket = false"
+          />
+          <ranking-dialog
+            v-if="tournament.ranking"
+            :show-ranking="showRanking"
+            :ranking="tournament.ranking"
+            :winner="tournament.winner"
+            @close-ranking="showRanking = false"
+          />
             <v-card-title class="d-flex">
               <div>
                 <div><h1 class="mb-1">{{tournament.name}}</h1></div>
                 <div>
                   <span class="text-overline black--text"><v-icon color="black" class="mr-1">mdi-calendar</v-icon>{{tournament.dates[0]}} - {{tournament.dates[1]}}</span>
-                  <v-chip color="green" small dark v-if="tournament.started">STARTED</v-chip>
+                  <v-chip color="green" small dark v-if="tournament.started && !isFinished">STARTED</v-chip>
+                  <v-chip color="orange" small dark v-else-if="isFinished">FINISHED</v-chip>
                 </div>
               </div>
               <v-spacer></v-spacer>
@@ -19,9 +36,10 @@ const tournamentDetails = Vue.component("TournamentDetails", {
             <v-card-text>
               <div class="mb-1"><h2>Info <v-icon>mdi-information-outline</v-icon></h2></div>
               <v-divider class="mb-4"></v-divider>
-              <v-btn color="primary" class="my-4" v-if="isOwnerOfTournament && checkIfPlayerIsSignedUp && !tournament.brackets" @click="placePlayers" :loading="loadingCreateBracket">Place Players</v-btn>
+              <v-btn color="primary" class="my-4" v-if="isOwnerOfTournament && checkIfPlayerIsSignedUp && !tournament.brackets && hasPlayer" @click="placePlayers" :loading="loadingCreateBracket">Place Players</v-btn>
               <v-btn color="deep-purple darken-1" class="mr-3" dark v-else-if="tournament.brackets" @click="showBracket = true">Show Bracket</v-btn>
               <v-btn color="deep-purple darken-1" class="mx-3" dark v-if="tournament.brackets && isOwnerOfTournament && !tournament.started" @click="startTournament">Start Tournament</v-btn>
+              <v-btn color="deep-purple darken-1" class="mx-3" dark v-if="isFinished" @click="showRanking = true">Show Ranking</v-btn>
               <info-tournament title="Creator" :info="tournament.creator"/>
               <info-tournament title="Game" :info="tournament.game"/>
               <info-tournament title="Type" :info="tournament.type"/>
@@ -115,6 +133,7 @@ const tournamentDetails = Vue.component("TournamentDetails", {
       tournament: null,
       user: null,
       showBracket: false,
+      showRanking: false,
       loadingCreateBracket: false,
     };
   },
@@ -135,7 +154,14 @@ const tournamentDetails = Vue.component("TournamentDetails", {
         return this.tournament.started
       }
       return false
-    }
+    },
+    isFinished(){
+      console.log(this.tournament.hasOwnProperty('winner'))
+      return this.tournament.hasOwnProperty('winner')
+    },
+    hasPlayer(){
+      return this.tournament.players.length > 0
+    },
   },
   methods: {
     loadTournament() {

@@ -28,3 +28,7 @@ a{
 .loser{
   border-left: 7px solid rgb(224, 108, 108)
 }
+
+.finish-round-btn{
+  bottom: 10px;
+}

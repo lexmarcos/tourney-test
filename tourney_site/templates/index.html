@@ -25,7 +25,7 @@
           <v-btn text href="/login">Login</v-btn>
         </template>
         <template v-else>
-          <router-link to="/profile" v-if="username"><v-btn text>[[  username ]]</v-btn></router-link>
+          <router-link to="/" v-if="username"><v-btn text>[[  username ]]</v-btn></router-link>
           <router-link to="/"><v-btn text>Home</v-btn></router-link>      
           <router-link to="/tournaments"><v-btn text>Tournaments</v-btn></router-link>
         </template>
@@ -61,6 +61,7 @@
   <script src="/static/js/components/login.vue.js"></script>
   <script src="/static/js/tournament-details.vue.js"></script>
 
+  <script src="/static/js/components/ranking-dialog.vue.js"></script>
   <script src="/static/js/components/info-tournament.vue.js"></script>
   <script src="/static/js/components/brackets-dialog.vue.js"></script>
   <script src="/static/js/components/game-match.vue.js"></script>
@@ -115,7 +116,6 @@
         loadUser() {
           return axios.get("/api/logged_user").then(result => {
             this.username = result.data.username;
-            console.log("bru")
             return result
           });
         }

@@ -58,6 +58,9 @@ const gameMatch = Vue.component("GameMatch", {
         player: player
       }
       axios.post("/api/tournament/player/win", payload).then((result) => {
+        if(result.data.is_able_to_finish){
+          this.$emit('can-finish', this.round)
+        }
         this.$emit('update-tournament')
       });
     }

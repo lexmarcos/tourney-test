@@ -154,6 +154,7 @@ def player_win():
     db = get_db()
 
     id = request.json['id']
+    print(id)
     round = request.json['round']
     game = request.json['game']
     player = request.json['player']
@@ -166,15 +167,61 @@ def player_win():
         bracket[round][game]['player_2']['winner'] = False
     else:
         bracket[round][game]['player_1']['winner'] = False
+
+    round_to_finish = None
+    is_able_to_finish = False
+    if game == int(len(bracket[round]))-1:
+        is_able_to_finish = True
+        round_to_finish = round
+
+    db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "brackets": bracket, "round_to_finish": round_to_finish }} )
+
+    return jsonify({"is_able_to_finish": is_able_to_finish})
+
+
+@bp.route('/api/tournament/round/finish', methods=['POST'])
+@login_required
+def finish_round():
+    db = get_db()
+
+    id = request.json['id']
+    round = request.json['round']
+    winner = ""
+    ranking = []
+
+    bracket = list(db.tournaments.find({"_id" : ObjectId(id)}, {"_id": 0, "brackets": 1}))[0]['brackets']
     
     if round + 1 < int(len(bracket)):
         bracket[round + 1] = make_next_round(bracket[round], round)
+    else:
+        if bracket[round][0]['player_1']['score'] > bracket[round][0]['player_2']['score']:
+            winner = bracket[round][0]['player_1']['name']
+        else:
+            winner = bracket[round][0]['player_2']['name']
 
-    db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "brackets": bracket }} )
+        for index, game in enumerate(bracket):
+            position = []
+            for player in game:
+                if not player['player_1']['winner']:
+                    position.append(player['player_1']['name'])
+                else:
+                    position.append(player['player_2']['name'])
+
+            ranking.append(position)
+        
+    db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "brackets": bracket, "winner": winner, "round_to_finish": None, "ranking": ranking }} )
 
     return jsonify({"rounds": bracket})
 
 
+@bp.route('/api/tournament/ranking/<id>', methods=['GET'])
+@login_required
+def generate_ranking(id):
+    db = get_db()
+
+    ranking = list(db.tournaments.find({"_id" : ObjectId(id)}, {"_id": 0, "ranking": 1}))[0]['ranking']
+
+    return jsonify({"rounds": ranking})
 
 
 @bp.route('/api/tournament/place_players', methods=['POST'])

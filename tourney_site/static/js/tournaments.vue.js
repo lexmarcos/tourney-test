@@ -117,7 +117,6 @@ const tournaments = Vue.component("Tournaments", {
     },
     loadYourTournaments() {
       axios.get("/api/tournaments/user").then(result => {
-        console.log(result)
         this.yourTournaments = result.data.tournaments;
       }).catch((error) => {
         return Bus.$emit('flash-message', message = {text: error.message, type: 'error'});
@@ -132,7 +131,6 @@ const tournaments = Vue.component("Tournaments", {
       }
       axios.post("/api/tournaments/new", payload).then(result => {
         this.loadTournaments()
-        console.log(result.data)
         if(!result.data.success){
           return this.$root.sendFlash(result.data.message, result.data.success);
         }
