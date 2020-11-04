@@ -159,7 +159,7 @@ const tournamentDetails = Vue.component("TournamentDetails", {
       return this.tournament.hasOwnProperty('winner')
     },
     hasPlayer(){
-      return this.tournament.players.length > 0
+      return this.tournament.players_joined.length > 0
     },
   },
   methods: {
