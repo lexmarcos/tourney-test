@@ -21,6 +21,10 @@ const tournamentDetails = Vue.component("TournamentDetails", {
             :winner="tournament.winner"
             @close-ranking="showRanking = false"
           />
+          <add-players-dialog
+            :showAddPlayers = "showAddPlayers"
+            @close-add-players="showAddPlayers = false"
+          />
             <v-card-title class="d-flex">
               <div>
                 <div><h1 class="mb-1">{{tournament.name}}</h1></div>
@@ -32,6 +36,7 @@ const tournamentDetails = Vue.component("TournamentDetails", {
               </div>
               <v-spacer></v-spacer>
               <v-btn color="primary" v-if="!isOwnerOfTournament && checkIfPlayerIsSignedUp" @click="signUpToTournament">Sign Up</v-btn>
+              <v-btn color="primary" v-if="isOwnerOfTournament && !tournament.brackets" @click="showAddPlayers = true">Add Players</v-btn>
             </v-card-title>
             <v-card-text>
               <div class="mb-1"><h2>Info <v-icon>mdi-information-outline</v-icon></h2></div>
@@ -134,6 +139,7 @@ const tournamentDetails = Vue.component("TournamentDetails", {
       user: null,
       showBracket: false,
       showRanking: false,
+      showAddPlayers: false,
       loadingCreateBracket: false,
     };
   },

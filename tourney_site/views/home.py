@@ -160,6 +160,18 @@ def player_win():
 
     bracket = list(db.tournaments.find({"_id" : ObjectId(id)}, {"_id": 0, "brackets": 1}))[0]['brackets']
 
+    not_games = 0
+    winners = 0
+    for games in bracket[round]:
+        if 'Winner of' in games['player_1']['name'] or 'Winner of' in games['player_2']['name']:
+            not_games += 1
+        if 'BYE' in games['player_1']['name'] or 'BYE' in games['player_2']['name']:
+            not_games += 1
+        if "winner" in games['player_1'] or "winner" in games['player_2']:
+            if  games['player_1']['winner'] or games['player_2']['winner']:
+                winners += 1
+
+
     bracket[round][game][player]['score'] = 1
     bracket[round][game][player]['winner'] = True
     if player == 'player_1':
@@ -169,14 +181,14 @@ def player_win():
 
     round_to_finish = None
     is_able_to_finish = False
-    if game == int(len(bracket[round]))-1:
+    if winners == (int(len(bracket[round]))-1)-not_games:
         is_able_to_finish = True
         round_to_finish = round
 
     db.tournaments.update({"_id" : ObjectId(id)}, {"$set":{ "brackets": bracket, "round_to_finish": round_to_finish }} )
 
     return jsonify({"is_able_to_finish": is_able_to_finish})
-
+    return {"dale": True}
 
 @bp.route('/api/tournament/round/finish', methods=['POST'])
 @login_required
@@ -201,10 +213,12 @@ def finish_round():
         for index, game in enumerate(bracket):
             position = []
             for player in game:
-                if not player['player_1']['winner']:
-                    position.append(player['player_1']['name'])
-                else:
-                    position.append(player['player_2']['name'])
+                if "winner" in player['player_1']:
+                    if not player['player_1']['winner']:
+                        position.append(player['player_1']['name'])
+                    else:
+                        if not player['player_2']['winner']:
+                            position.append(player['player_2']['name'])
 
             ranking.append(position)
         

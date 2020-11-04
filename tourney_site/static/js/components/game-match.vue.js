@@ -7,7 +7,7 @@ const gameMatch = Vue.component("GameMatch", {
           <v-spacer></v-spacer>
           <div v-if="!verifyPlayer1Name" >
             <span class="font-weight-medium">{{match.player_1.score}}</span>
-            <v-btn v-if="showWinButton && verifyPlayer1Win === ''" x-small color="green" dark class="ml-2" @click="makePlayerWinner('player_1')">win</v-btn>
+            <v-btn v-if="showWinButton && verifyPlayer1Win === '' && !verifyPlayer2Name" x-small color="green" dark class="ml-2" @click="makePlayerWinner('player_1')">win</v-btn>
           </div>
         </div>
         <v-divider></v-divider>
@@ -16,7 +16,7 @@ const gameMatch = Vue.component("GameMatch", {
           <v-spacer></v-spacer>
           <div v-if="!verifyPlayer2Name">
             <span class="font-weight-medium">{{match.player_2.score}}</span>
-            <v-btn v-if="showWinButton && verifyPlayer2Win === ''" x-small color="green" dark class="ml-2" @click="makePlayerWinner('player_2')">win</v-btn>
+            <v-btn v-if="showWinButton && verifyPlayer2Win === '' && !verifyPlayer1Name" x-small color="green" dark class="ml-2" @click="makePlayerWinner('player_2')">win</v-btn>
           </div>
         </div>
       </v-card>
