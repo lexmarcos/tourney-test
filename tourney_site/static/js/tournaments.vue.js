@@ -135,6 +135,7 @@ const tournaments = Vue.component("Tournaments", {
         }
         this.dialog = false;
         this.loadTournaments();
+        this.loadYourTournaments();
         return this.$root.sendFlash(result.data.message, result.data.success);
       })
     }
