@@ -36,7 +36,6 @@ const tournamentDetails = Vue.component("TournamentDetails", {
               </div>
               <v-spacer></v-spacer>
               <v-btn color="primary" v-if="!isOwnerOfTournament && checkIfPlayerIsSignedUp" @click="signUpToTournament">Sign Up</v-btn>
-              <v-btn color="primary" v-if="isOwnerOfTournament && !tournament.brackets" @click="showAddPlayers = true">Add Players</v-btn>
             </v-card-title>
             <v-card-text>
               <div class="mb-1"><h2>Info <v-icon>mdi-information-outline</v-icon></h2></div>
