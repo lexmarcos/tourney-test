@@ -26,6 +26,14 @@ def init_db():
         }},
         upsert=True
     )
+    db.users.find_one_and_update(
+        {'username': 'ds-tester'},
+        {'$set': {
+            'username': 'ds-tester',
+            'password': generate_password_hash('ds-tester')
+        }},
+        upsert=True
+    )
 
 
 @click.command('init-db')
